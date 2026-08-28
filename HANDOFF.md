@@ -16,13 +16,26 @@ each client's accounts manually, runs in Meta **Development mode**, no App Revie
 - Stack: SvelteKit + Supabase + Netlify + Meta Graph API. Deploys are MANUAL
   (`netlify deploy --build --prod`).
 
-## Status: BUILT + TESTED, not yet deployed (needs your accounts)
+## Status: LIVE (deployed 2026-08-28)
 
-Code is complete and verified locally: **32 tests pass**, typecheck + build are
-clean, the dev server boots and auth works. What remains is provisioning (only
-you can do these — they need your Supabase/Meta/Netlify accounts).
+- **Control panel:** https://f925-social-posting.netlify.app (admin password in
+  the deploy env `ADMIN_PASSWORD` — a generated `f925-social-…` value; change it
+  when you like via Netlify env + redeploy).
+- **GitHub:** https://github.com/martinmana808/social-posting-automated (private).
+- **Supabase:** project `social-posting-automated` (ref `qyadbgawemeiwsvmbows`,
+  Sydney). Tables `clients` + `posts` migrated, RLS on, public bucket
+  `client-media` created. Env imported into Netlify.
+- **Netlify:** site `f925-social-posting`. Deploys are MANUAL
+  (`netlify deploy --build --prod`). Scheduled fn `publish-due` runs every 15 min.
+- 32 tests pass, typecheck + build clean, live login/dashboard/clients verified.
 
-### Go-live checklist
+### Still needed to onboard real clients
+- A **neutral Meta app** — set `META_APP_ID` / `META_APP_SECRET` (currently blank
+  in the env) so `onboard-client.mjs` can mint tokens. Or skip the script and
+  paste Page ID + token in **Clients → Set credentials** (UI path needs no Meta
+  app). Either way the client must add F925 as a **Page admin** first.
+
+### Original go-live checklist (kept for reference)
 
 1. **Supabase** — create a NEW project (isolated from other tools). In the SQL
    editor run `supabase/migrations/0001_init.sql` (creates `clients` + `posts`,
