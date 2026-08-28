@@ -26,6 +26,23 @@
 		</form>
 	</div>
 
+	<details class="help">
+		<summary>How posting works</summary>
+		<ol>
+			<li><b>Pick the client</b> in the top-bar switcher — everything below is only theirs.</li>
+			<li><b>Add content:</b> click <b>+ New post</b> to upload finished images (drag to reorder for a
+				carousel), write the caption, and set the date/time in <b>{data.client.timezone}</b>. Or paste a
+				CSV under “Add posts from CSV”.</li>
+			<li>Posts sit as <b>pending</b> until their scheduled time. A background job publishes anything
+				due <b>every 15 minutes</b> to the client's Facebook + Instagram.</li>
+			<li>To publish immediately, hit <b>Publish anything due now</b> (or <b>Publish now</b> on a card).</li>
+		</ol>
+		<p class="muted small">
+			Each post goes to <b>both</b> Facebook and Instagram. Failures show a red status with the reason
+			and are retried automatically. Manage a client's connection under <a href="/admin/clients">Clients</a>.
+		</p>
+	</details>
+
 	<section class="stats">
 		<span><b>{data.stats?.draft}</b> draft</span>
 		<span><b>{data.stats?.pending}</b> pending</span>
@@ -93,6 +110,31 @@ https://.../photo.jpg,New arrival,In store now,#brand #newin,2026-09-01 10:00"
 	}
 	.head h1 {
 		margin: 0 0 0.2rem;
+	}
+	.help {
+		background: #fbf7ec;
+		border: 1px solid #ecdfc0;
+		border-radius: 10px;
+		padding: 0.8rem 1.1rem;
+		margin: 1rem 0;
+		font-size: 0.9rem;
+	}
+	.help summary {
+		cursor: pointer;
+		font-weight: 700;
+	}
+	.help ol {
+		margin: 0.6rem 0 0.4rem;
+		padding-left: 1.2rem;
+	}
+	.help li {
+		margin-bottom: 0.4rem;
+	}
+	.help a {
+		color: #1e40af;
+	}
+	.small {
+		font-size: 0.78rem;
 	}
 	.warn {
 		color: #946200;

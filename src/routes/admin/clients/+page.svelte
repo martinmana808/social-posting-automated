@@ -27,6 +27,28 @@
 
 <h1>Clients</h1>
 
+<details class="help">
+	<summary>How to connect a client</summary>
+	<ol>
+		<li>The client adds <b>you (F925) as an admin or editor on their Facebook Page</b> (Meta
+			Business Suite → their Page → Settings → Page access), and makes sure their Instagram is a
+			<b>Business or Creator account linked to that Page</b>. A personal Instagram can't be posted to.</li>
+		<li>Add the client below (name, a short slug, their timezone).</li>
+		<li>Get a <b>User Access Token</b> in the
+			<a href="https://developers.facebook.com/tools/explorer" target="_blank" rel="noreferrer">Graph API Explorer</a>
+			(your Meta app) with these permissions: <code>pages_show_list, pages_read_engagement,
+			pages_manage_posts, instagram_basic, instagram_content_publish, business_management</code>.</li>
+		<li>Either run <code>node --env-file=.env scripts/onboard-client.mjs &lt;slug&gt; &lt;token&gt;</code>,
+			or click <b>Set credentials</b> and paste the Page ID, token, and (optional) Instagram user ID.
+			The token is encrypted before it's stored.</li>
+	</ol>
+	<p class="muted small">
+		Page tokens last about 60 days — this page shows a warning when one is close to expiring.
+		Re-run the onboarding step to refresh it. <b>Pause</b> a client to stop all their scheduled posts
+		without deleting anything.
+	</p>
+</details>
+
 {#if form?.error}<p class="err">{form.error}</p>{/if}
 {#if form?.created}<p class="ok">✓ Client created.</p>{/if}
 {#if form?.credsSet}<p class="ok">✓ Credentials saved.</p>{/if}
@@ -118,6 +140,28 @@
 <p class="back"><a href="/">← Back to posts</a></p>
 
 <style>
+	.help {
+		background: #fbf7ec;
+		border: 1px solid #ecdfc0;
+		border-radius: 10px;
+		padding: 0.8rem 1.1rem;
+		margin-bottom: 1.2rem;
+		font-size: 0.9rem;
+	}
+	.help summary {
+		cursor: pointer;
+		font-weight: 700;
+	}
+	.help ol {
+		margin: 0.6rem 0 0.4rem;
+		padding-left: 1.2rem;
+	}
+	.help li {
+		margin-bottom: 0.4rem;
+	}
+	.help a {
+		color: #1e40af;
+	}
 	h2 {
 		margin: 0 0 0.6rem;
 		font-size: 1rem;
