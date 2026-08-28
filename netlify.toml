@@ -1,0 +1,11 @@
+# Netlify config for social-posting-automated.
+# The scheduled function pings /api/cron every 15 min to publish due posts.
+
+[build]
+	command = "npm run build"
+
+[build.environment]
+	NODE_VERSION = "20"
+
+[functions]
+	directory = "netlify/functions"
