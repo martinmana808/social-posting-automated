@@ -65,7 +65,7 @@ you can do these — they need your Supabase/Meta/Netlify accounts).
 ## Graduation trigger (Path A → Path B)
 
 At ~10 clients (or before), move to OAuth self-onboarding + Meta App Review +
-Advanced Access (as the STIHL app `../social-automated-posting` pioneered), with
+Advanced Access (as the STIHL app `../stihl-automated-posting` pioneered), with
 a neutral consent-screen brand and long-lived tokens. Path A's Dev-mode +
 manual-token model is deliberately a "get going now, graduate later" choice.
 
