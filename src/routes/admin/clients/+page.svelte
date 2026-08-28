@@ -28,24 +28,47 @@
 <h1>Clients</h1>
 
 <details class="help">
-	<summary>How to connect a client</summary>
-	<ol>
-		<li>The client adds <b>you (F925) as an admin or editor on their Facebook Page</b> (Meta
-			Business Suite → their Page → Settings → Page access), and makes sure their Instagram is a
-			<b>Business or Creator account linked to that Page</b>. A personal Instagram can't be posted to.</li>
-		<li>Add the client below (name, a short slug, their timezone).</li>
-		<li>Get a <b>User Access Token</b> in the
-			<a href="https://developers.facebook.com/tools/explorer" target="_blank" rel="noreferrer">Graph API Explorer</a>
-			(your Meta app) with these permissions: <code>pages_show_list, pages_read_engagement,
-			pages_manage_posts, instagram_basic, instagram_content_publish, business_management</code>.</li>
-		<li>Either run <code>node --env-file=.env scripts/onboard-client.mjs &lt;slug&gt; &lt;token&gt;</code>,
-			or click <b>Set credentials</b> and paste the Page ID, token, and (optional) Instagram user ID.
-			The token is encrypted before it's stored.</li>
-	</ol>
+	<summary>How to connect a client (read me)</summary>
+
+	<p class="help__lead">Connecting a client is two parts: <b>they</b> give F925 access to their Page,
+		then <b>you</b> plug that access in here. It only happens once per client.</p>
+
+	<div class="help__block">
+		<h4>Part 1 — Send these steps to your client</h4>
+		<ol>
+			<li>On a computer, open <a href="https://business.facebook.com" target="_blank" rel="noreferrer">business.facebook.com</a>
+				(Meta Business Suite) and choose your Facebook Page.</li>
+			<li>Go to <b>Settings → People</b> → <b>Add people</b>. Type in <b>F925's email address</b>
+				(the email on the Facebook account F925 will use) and give it <b>Full control</b>. That's it —
+				no password is ever shared, and you can remove F925 anytime.</li>
+			<li>Make sure the Instagram is a <b>Business or Creator</b> account (Instagram app → Settings →
+				Account type) and <b>linked to that Facebook Page</b>. A personal Instagram can't be posted to.</li>
+		</ol>
+		<p class="muted small">In plain terms: they add <b>your F925 email</b> as an admin of their Page.
+			Once they do, that Page shows up under F925's own Facebook.</p>
+	</div>
+
+	<div class="help__block">
+		<h4>Part 2 — Then, here (F925 side, one technical step)</h4>
+		<ol>
+			<li><b>Add the client</b> above — just their name and timezone. A short internal id is created
+				automatically.</li>
+			<li>Get a <b>token</b>: open the
+				<a href="https://developers.facebook.com/tools/explorer" target="_blank" rel="noreferrer">Graph API Explorer</a>,
+				pick your Meta app, and click <b>Generate Access Token</b> with these permissions ticked:
+				<code>pages_show_list, pages_read_engagement, pages_manage_posts, instagram_basic,
+				instagram_content_publish, business_management</code>. Copy the token it gives you.</li>
+			<li>Click <b>Set credentials</b> on the client below and paste the <b>Page ID</b> + <b>token</b>
+				(and Instagram ID if you have it). It's encrypted before it's saved.
+				<br /><span class="muted small">Prefer the terminal? Run
+				<code>node --env-file=.env scripts/onboard-client.mjs &lt;name&gt; &lt;token&gt;</code>
+				and it fills everything in for you.</span></li>
+		</ol>
+	</div>
+
 	<p class="muted small">
-		Page tokens last about 60 days — this page shows a warning when one is close to expiring.
-		Re-run the onboarding step to refresh it. <b>Pause</b> a client to stop all their scheduled posts
-		without deleting anything.
+		Tokens last about 60 days — a warning shows here when one is close to expiring; just repeat Part 2 to
+		refresh it. <b>Pause</b> a client to stop their posts without deleting anything.
 	</p>
 </details>
 
@@ -57,8 +80,7 @@
 	<h2>Add a client</h2>
 	<form method="POST" action="?/create" use:enhance>
 		<div class="row">
-			<label>Name<input name="name" placeholder="Acme Ltd" required /></label>
-			<label>Slug<input name="slug" placeholder="acme" required /></label>
+			<label>Client name<input name="name" placeholder="Acme Coffee" required /></label>
 			<label>Timezone
 				<input name="timezone" list="tzs" value="Pacific/Auckland" required />
 				<datalist id="tzs">
@@ -67,6 +89,7 @@
 			</label>
 			<button class="primary" type="submit">Add client</button>
 		</div>
+		<p class="muted small">Just a name and their timezone — that's it. Set their Facebook &amp; Instagram next.</p>
 	</form>
 </section>
 
@@ -161,6 +184,19 @@
 	}
 	.help a {
 		color: #1e40af;
+	}
+	.help__lead {
+		margin: 0.6rem 0 0.9rem;
+	}
+	.help__block {
+		background: #fff;
+		border-radius: 8px;
+		padding: 0.7rem 1rem;
+		margin-bottom: 0.7rem;
+	}
+	.help__block h4 {
+		margin: 0 0 0.3rem;
+		font-size: 0.9rem;
 	}
 	h2 {
 		margin: 0 0 0.6rem;

@@ -8,11 +8,27 @@ import {
 } from '$lib/server/clients';
 import type { Actions, PageServerLoad } from './$types';
 
-const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-
 /** ~60-day default expiry for a freshly minted long-lived Page token. */
 function defaultExpiry(): string {
 	return new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString();
+}
+
+/** Make a URL-safe id from a name. */
+function slugify(s: string): string {
+	return (
+		s
+			.toLowerCase()
+			.trim()
+			.replace(/[^a-z0-9]+/g, '-')
+			.replace(/^-|-$/g, '') || 'client'
+	);
+}
+
+/** A slug not already taken (appends -2, -3, … if needed). */
+async function uniqueSlug(base: string): Promise<string> {
+	const taken = new Set((await listClients()).map((c) => c.slug));
+	if (!taken.has(base)) return base;
+	for (let i = 2; ; i++) if (!taken.has(`${base}-${i}`)) return `${base}-${i}`;
 }
 
 export const load: PageServerLoad = async () => {
@@ -23,14 +39,10 @@ export const actions: Actions = {
 	create: async ({ request }) => {
 		const f = await request.formData();
 		const name = String(f.get('name') ?? '').trim();
-		const slug = String(f.get('slug') ?? '')
-			.trim()
-			.toLowerCase();
 		const timezone = String(f.get('timezone') ?? '').trim() || 'Pacific/Auckland';
 		if (!name) return fail(400, { error: 'Client name is required.' });
-		if (!SLUG_RE.test(slug)) {
-			return fail(400, { error: 'Slug must be lowercase letters, numbers and hyphens.' });
-		}
+		// The slug is an internal id — generated from the name, no need to ask.
+		const slug = await uniqueSlug(slugify(name));
 		const res = await createClient({ name, slug, timezone });
 		if ('error' in res) return fail(400, { error: res.error });
 		return { created: true };
